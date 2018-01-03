@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class rotate : MonoBehaviour
 {
     float FromEuler = 0;                        //开始的角度
@@ -25,7 +25,8 @@ public class rotate : MonoBehaviour
     {
 
         //Debug.Log(transform.localEulerAngles.y);
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0))
+        {
             hitGO = cameraray.hitgameobject;
         }
         if (Input.GetMouseButton(0))                        //使用鼠标 进行旋转  方便测试
@@ -73,7 +74,8 @@ public class rotate : MonoBehaviour
             //  {
             //  if (hit.transform.name == transform.name)
             //   {
-            if (Input.GetTouch(0).phase == TouchPhase.Began) {
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
                 hitGO = cameraray.hitgameobject;
             }
             if (Input.GetTouch(0).phase == TouchPhase.Moved)     //手指滑动 物体旋转 但只是按手指的移动速度 而且不会自动矫正 矫正放到LateUpdate中
@@ -84,8 +86,9 @@ public class rotate : MonoBehaviour
                 Touch touch = Input.GetTouch(0);
                 Vector2 deltaPos = touch.deltaPosition;
                 transform.Rotate(Vector3.down * deltaPos.x*0.14f , Space.World);      //物体旋转
+            //    hitGO = cameraray.hitgameobject;
+                hitGO.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.7f);        //物体隐藏
 
-                
             }
             if (Input.GetTouch(0).phase == TouchPhase.Ended)
             {
@@ -112,14 +115,23 @@ public class rotate : MonoBehaviour
                         ToEuler = 0;                                                                //旋转终止点
                     }
                 }
+                hitGO.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
             }
-            hitGO.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        
             //  }
 
             //   }
         }
 
 
+    }
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(0, 0, 100, 100), "EXIT"))
+        {
+            Application.LoadLevel(1);
+            SceneManager.LoadScene(1);
+        }
     }
     private void LateUpdate()
     {
